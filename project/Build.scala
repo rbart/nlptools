@@ -48,12 +48,26 @@ object NlpToolsBuild extends Build {
 
   // dependencies
   val junit = "junit" % "junit" % "4.11"
-  val commonScala = "edu.washington.cs.knowitall.common-scala" %% "common-scala" % "1.1.1"
-  val specs2 = "org.specs2" %% "specs2" % "1.12.3"
-  val scopt = "com.github.scopt" %% "scopt" % "2.1.0"
+  val commonScala = "edu.washington.cs.knowitall.common-scala" % "common-scala" % "1.1.1" cross CrossVersion.binaryMapped {
+    case "2.9.3" => "2.9.2"
+    case "2.10.1" => "2.10"
+    case x => x
+  }
+  val specs2 = "org.specs2" % "specs2" % "1.12.3" cross CrossVersion.binaryMapped {
+    case "2.9.3" => "2.9.2"
+    case "2.10.1" => "2.10"
+    case x => x
+  }
+
+  val scopt = "com.github.scopt" % "scopt" % "2.1.0" cross CrossVersion.binaryMapped {
+    case "2.9.3" => "2.9.2"
+    case "2.10.1" => "2.10"
+    case x => x
+  }
+
   val slf4j = "org.slf4j" % "slf4j-api" % "1.7.2"
-  val unfilteredFilter = "net.databinder" %% "unfiltered-filter" % "0.6.5"
-  val unfilteredJetty = "net.databinder" %% "unfiltered-jetty" % "0.6.5"
+  val unfilteredFilter = "net.databinder" %% "unfiltered-filter" % "0.6.8"
+  val unfilteredJetty = "net.databinder" %% "unfiltered-jetty" % "0.6.8"
   val dispatch = "net.databinder.dispatch" %% "dispatch-core" % "0.10.0"
 
 
