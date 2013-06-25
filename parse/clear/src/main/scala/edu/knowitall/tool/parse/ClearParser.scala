@@ -2,25 +2,24 @@ package edu.knowitall
 package tool
 package parse
 
-import scala.collection.JavaConverters._
-import edu.knowitall.tool.tokenize.Tokenizer
-import edu.knowitall.tool.tokenize.Token
-import graph.Dependency
+import java.util.zip.ZipInputStream
+
+import scala.collection.JavaConverters.asScalaIteratorConverter
+
+import com.googlecode.clearnlp.component.dep.CDEPPassParser
+import com.googlecode.clearnlp.component.morph.CEnglishMPAnalyzer
+import com.googlecode.clearnlp.dependency.DEPNode
+import com.googlecode.clearnlp.dependency.DEPTree
+
+import edu.knowitall.common.Resource.using
 import edu.knowitall.tool.parse.graph.DependencyGraph
 import edu.knowitall.tool.parse.graph.DependencyNode
-import java.lang.ProcessBuilder
-import java.io.PrintWriter
-import com.googlecode.clearnlp.component.pos.CPOSTagger
-import com.googlecode.clearnlp.component.dep.CDEPPassParser
-import java.util.zip.ZipInputStream
-import com.googlecode.clearnlp.nlp.NLPDecode
-import com.googlecode.clearnlp.dependency.DEPTree
-import com.googlecode.clearnlp.dependency.DEPNode
-import edu.knowitall.tool.tokenize.ClearTokenizer
-import edu.knowitall.common.Resource.using
-import com.googlecode.clearnlp.component.morph.CEnglishMPAnalyzer
-import edu.knowitall.tool.postag.Postagger
 import edu.knowitall.tool.postag.ClearPostagger
+import edu.knowitall.tool.postag.PostaggedToken
+import edu.knowitall.tool.postag.Postagger
+import edu.knowitall.tool.tokenize.Token
+import edu.knowitall.tool.tokenize.Tokenizer
+import graph.Dependency
 
 class ClearParser(val postagger: Postagger = new ClearPostagger()) extends DependencyParser {
   val clearMorphaUrl = this.getClass.getResource("/edu/knowitall/tool/tokenize/dictionary-1.2.0.zip")
@@ -35,8 +34,16 @@ class ClearParser(val postagger: Postagger = new ClearPostagger()) extends Depen
     new CDEPPassParser(new ZipInputStream(input))
   }
 
-  override def dependencyGraph(string: String) = {
+  override def dependencyGraph(string: String): DependencyGraph = {
     val tokens = postagger.postag(string)
+    this.dependencyGraph(string, tokens)
+  }
+
+  def dependencyGraph(tokens: Seq[PostaggedToken]): DependencyGraph = {
+    this.dependencyGraph(Tokenizer.originalText(tokens), tokens)
+  }
+
+  def dependencyGraph(string: String, tokens: Seq[PostaggedToken]) = {
     val tree = new DEPTree()
     tokens.zipWithIndex.foreach { case (token, i) =>
       val node = new DEPNode(i + 1, token.string)
