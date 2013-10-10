@@ -20,5 +20,5 @@ trait Chunker extends Chunked {
 
   def chunker: edu.knowitall.tool.chunk.Chunker
 
-  override lazy val tokens = chunker.chunk(this.text)
+  override lazy val tokens = Chunker.joinPos(Chunker.joinOf(chunker.chunk(this.text)))
 }
