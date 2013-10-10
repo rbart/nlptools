@@ -7,6 +7,7 @@ import edu.knowitall.tool.stem._
 
 trait Tokenized {
   this: Sentence =>
+
   type token <: Token
 
   def tokens: Seq[token]
@@ -19,7 +20,7 @@ trait Tokenizer extends Tokenized {
 
   type token = Token
 
-  def tokenizer: edu.knowitall.tool.tokenize.Tokenizer
+  protected def tokenize(text: String): Seq[token]
 
-  override lazy val tokens = tokenizer.tokenize(text)
+  override lazy val tokens = tokenize(text)
 }

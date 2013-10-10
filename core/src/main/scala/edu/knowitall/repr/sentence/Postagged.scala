@@ -15,8 +15,7 @@ trait Postagger extends Postagged {
 
   type token = PostaggedToken
 
-  def postagger: edu.knowitall.tool.postag.Postagger
+  protected def postag(text: String): Seq[token]
 
-  override lazy val tokens = postagger.postag(this.text)
+  override lazy val tokens = postag(this.text)
 }
-

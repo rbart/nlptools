@@ -18,7 +18,7 @@ trait Chunker extends Chunked {
 
   type token = ChunkedToken
 
-  def chunker: edu.knowitall.tool.chunk.Chunker
+  protected def chunk(text: String): Seq[token]
 
-  override lazy val tokens = Chunker.joinPos(Chunker.joinOf(chunker.chunk(this.text)))
+  override lazy val tokens = chunk(this.text)
 }

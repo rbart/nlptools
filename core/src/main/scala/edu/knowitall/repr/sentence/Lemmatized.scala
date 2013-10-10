@@ -11,8 +11,8 @@ trait Lemmatized {
 trait Lemmatizer extends Lemmatized {
   tokenized: Tokenized =>
 
-  def lemmatizer: Stemmer
+  protected def lemmatize(t: token): edu.knowitall.tool.stem.Lemmatized[token]
 
   override lazy val lemmatizedTokens: Seq[edu.knowitall.tool.stem.Lemmatized[token]] =
-    tokenized.tokens map lemmatizer.lemmatizeToken
+    tokenized.tokens map lemmatize
 }
