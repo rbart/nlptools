@@ -5,7 +5,7 @@ import edu.knowitall.tool.postag.PostaggedToken
 import edu.knowitall.tool.parse._
 import edu.knowitall.tool.parse.graph._
 
-trait Parsed extends Postagged {
+trait Parsed {
   this: Sentence =>
 
   def dgraph: DependencyGraph
