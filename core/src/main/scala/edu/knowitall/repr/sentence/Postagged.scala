@@ -2,30 +2,21 @@ package edu.knowitall.repr.sentence
 
 import edu.knowitall.tool.postag._
 
-trait PostaggedSupertrait extends TokenizedSupertrait {
+trait Postagged extends Tokenized {
   this: Sentence =>
 
-  def postaggedTokens: Seq[PostaggedToken]
   type token <: PostaggedToken
 
-  override def tokenizedTokens = postaggedTokens
-
-  def postags: Seq[String] = postaggedTokens.map(_.postag)
-}
-
-trait Postagged extends PostaggedSupertrait {
-  this: Sentence =>
-
-  type token = PostaggedToken
-  override def tokens: Seq[token] = postaggedTokens
+  def postags: Seq[String] = tokens.map(_.postag)
 }
 
 trait Postagger extends Postagged {
   this: Sentence =>
+
+  type token = PostaggedToken
+
   def postagger: edu.knowitall.tool.postag.Postagger
 
-  def postPostag(tokens: Seq[PostaggedToken]): Seq[PostaggedToken] = tokens
-  override lazy val postaggedTokens: Seq[PostaggedToken] = 
-    postPostag(postagger.postag(this.text))
+  override lazy val tokens = postagger.postag(this.text)
 }
 

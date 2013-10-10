@@ -5,7 +5,7 @@ import edu.knowitall.tool.postag.PostaggedToken
 import edu.knowitall.tool.parse._
 import edu.knowitall.tool.parse.graph._
 
-trait Parsed {
+trait Parsed extends Postagged {
   this: Sentence =>
 
   def dgraph: DependencyGraph
@@ -16,8 +16,5 @@ trait Parser extends Parsed {
 
   def parser: DependencyParser
 
-  def postParse(dgraph: DependencyGraph): DependencyGraph = dgraph
-
-  override lazy val dgraph = 
-    postParse(parser.dependencyGraphPostagged(this.postaggedTokens))
+  override lazy val dgraph = parser.dependencyGraphPostagged(this.tokens)
 }
